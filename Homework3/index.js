@@ -1,9 +1,6 @@
 class Calendar {
     constructor(elementId,day,month,year) {
         this.element = document.getElementById(elementId);
-        this.inputCell = document.getElementById('cell');
-        this.notesCell = document.getElementById('notes');
-        this.notes = JSON.parse(localStorage.getItem('calendarNotes')) || {};
         this.currentMonth = month;
         this.currentYear = year;
         this.currentDay = day;
@@ -33,7 +30,7 @@ class Calendar {
             calendarGrid.appendChild(dayElement);
         });
 
-        // Render the days of the month
+        // Render the days of the this.currentMonth
         for (let i = 0; i < firstDay; i++) {
             const emptyDate = document.createElement('div');
             calendarGrid.appendChild(emptyDate);
@@ -43,79 +40,25 @@ class Calendar {
             const dateElement = document.createElement('div');
             dateElement.classList.add('calendar-date');
             dateElement.textContent = day;
-            if (day === this.currentDay) {// && month === this.currentMonth && year === this.currentYear
+            if (day === date.getDate() && this.currentMonth === date.getMonth() && this.currentYear === date.getFullYear()){
                 dateElement.classList.add('current-date');
             }
 
             dateElement.addEventListener('click', () => {
-                // this.currentMonth = month;
-                // this.currentYear = year;
-                this.currentDay = day;
+                console.log(date)
+                date.setDate(day);
+                date.setMonth(this.currentMonth);
+                date.setFullYear(this.currentYear);
                 this.renderCalendar();
-                this.addInputField(this.inputCell, day)
             });
             calendarGrid.appendChild(dateElement);
-            if (this.notes[day]) {
-                this.notes[day].forEach(note => this.displayNote(day, note));
-            }
         }
-        document.getElementById('current-date').textContent = 'Selected date: ' + this.currentDay + ' ' + this.monthName(this.currentMonth) + ' ' + this.currentYear;
-        
-    }
-    addInputField(date) {
-        const inputContainer = document.createElement('div');
-        inputContainer.className = 'input-container';
-
-        const input = document.createElement('input');
-        input.type = 'text';
-
-        const saveButton = document.createElement('button');
-        saveButton.innerText = 'Save';
-        saveButton.addEventListener('click', () => {
-            this.saveNote(date, input.value);
-            inputContainer.remove();
-        });
-
-        inputContainer.appendChild(input);
-        inputContainer.appendChild(saveButton);
-        this.inputCell.appendChild(inputContainer);
-    }
-
-    saveNote(date, note) {
-        if (!this.notes[date]) {
-            this.notes[date] = [];
-        }
-        this.notes[date].push(note);
-        localStorage.setItem('calendarNotes', JSON.stringify(this.notes));
-        this.displayNote(date, note);
-    }
-
-    displayNote(date, note) {
-        const noteDiv = document.createElement('div');
-        noteDiv.className = 'note';
-        noteDiv.innerText = note;
-
-        const deleteButton = document.createElement('button');
-        deleteButton.innerText = 'x';
-        deleteButton.addEventListener('click', () => this.deleteNote(date, note, noteDiv));
-
-        noteDiv.appendChild(deleteButton);
-        this.notesCell.appendChild(noteDiv);
-    }
-
-    deleteNote(date, note, noteDiv) {
-        this.notes[date] = this.notes[date].filter(n => n !== note);
-        if (this.notes[date].length === 0) {
-            delete this.notes[date];
-        }
-        localStorage.setItem('calendarNotes', JSON.stringify(this.notes));
-        noteDiv.remove();
+        document.getElementById('current-date').textContent = 'Selected date: ' + date.getDate() + ' ' + this.monthName(date.getMonth()) + ' ' + date.getFullYear();
     }
 }
-
+let date = new Date();
 document.addEventListener('DOMContentLoaded', () => {
-    let date = new Date();
-    let day = date.getDay();
+    let day = date.getDate();
     let month=date.getMonth();
     let year=date.getFullYear();
     let cal = new Calendar('calendar',day,month,year);

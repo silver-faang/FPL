@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Calendar</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+
+<body>
+
+    <div class="calendar">
+        <div class="calendar-header">
+            <button id="prevMonth">&lt;</button>
+            <h2 id="monthYear"></h2>
+            <button id="nextMonth">&gt;</button>
+        </div>
+        <div class="calendar-grid" id="calendarGrid">
+        </div>
+    </div>
+    <div id="current-date"></div>
+    <div id="cell"></div>
+    <div id="notes"></div>
+    
+    <table>
+        <tr>
+        
+        <!-- <th onclick="sortTable(0)">Done</th> -->
+        <th onclick="sortTable(2)">Date</th>
+        <th onclick="sortTable(1)">Task</th>
+        </tr>
+        <tbody id= "myTable">
+
+        </tbody>
+    </table>
+        
+
+    <script src="index.js"></script>
+</body>
+
+</html>
